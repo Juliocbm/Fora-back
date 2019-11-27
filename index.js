@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/foraBD',{useNewUrlParser:true})
 		//Si se conecta exitosamente mostramos un mensaje de exito.
 		console.log('La conexión a la base de datos foraBD se ha realizado correctamente...');
 		http.listen(port, () => {
-			console.log("El servidor local con Node y Express esta corriendo correctamente...");
+			console.log("El servidor local con Node y Express esta corriendo correctamente..."+port);
 		});
 	})
 	//cachamos el error cuando exista...

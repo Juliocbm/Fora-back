@@ -12,7 +12,7 @@ var md_upload = multipart({uploadDir:'./uploads/users'}); //MIDDLEWARE DONDE SE 
 
 //Indicamos la ruta y la acción a cargar
 //GET
-api.get('/pruebas-del-controlador',md_auth.ensureAuth ,UserController.pruebas);//RUTA DE PRUEBA
+api.get('/pruebas-del-controlador' ,UserController.pruebas);//RUTA DE PRUEBA
 api.get('/get-image-file/:id',UserController.getImageFile);//OBTENER LA IMAGEN DEL USUARIO
 api.get('/admins',UserController.getAdmins);//LISTADO DE LOS ADMINISTRADORES
 
