@@ -9,7 +9,7 @@ var app = express();
 
 //Cargamos las rutas
 var user_routes = require('./routes/user.route');
-var noticia_routes = require('./routes/noticia.route');
+var viaje_routes = require('./routes/viaje.route');
 
 
 //Middlewares de body-parser
@@ -33,6 +33,6 @@ app.use((req, res, next) => {
 //Ruta base
 //Si no quiero un prefijo simplemente cargo '/'
 app.use('/api',user_routes);
-app.use('/api',noticia_routes);
+app.use('/api',viaje_routes);
 
 module.exports = app;
