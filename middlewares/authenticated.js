@@ -2,7 +2,7 @@
 
 var jwt = require('jwt-simple');
 var moment = require('moment');
-var secret = 'clave_secreta_de_Sagarpa_app_tec';
+var secret = 'Fora_Ride_0192';
 
 exports.ensureAuth = function(req,res,next){
 	if(!req.headers.authorization){

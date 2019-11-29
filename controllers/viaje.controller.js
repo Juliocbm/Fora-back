@@ -1,7 +1,8 @@
 'use strict'
 
 //MODELOS
-var Viaje = require('../models/viaje.model'); //MODELO DE NOTICIA
+var Viaje = require('../models/viaje.model'); //MODELO DE VIAJE
+var Direccion = require('../models/direccion.model'); //MODELO DE DIRECCION
 var Usuario = require('../models/user.model');
 
 var mongoosePaginate = require('mongoose-pagination');
@@ -20,32 +21,24 @@ function pruebas(req, res) {
 
 //FUNCIÓN PARA OBTENER TODAS LAS VIAJES (PIENSO QUE AQUÍ SE DEBERÍA DE LIMITAR LA CANTIDAD DE VIAJES QUE SE MUESTREN)
 function getViajes(req, res) {
-
-
-
-	//REALIZAMOS UNA CONSULTA A LA COLECCIÓN DE NOTICIAS
-	Viaje.find({
-		status: true
-	}).exec((err, viajesFind) => {
+	Viaje.find({}).populate({
+		path: 'origenId'
+	}).exec((err, viajes) => {
 		if (err) {
 			res.status(500).send({
-				message: 'No se pudo realizar la consulta a la BD'
+				message: 'Error en la petición.'
 			});
-		} else if (!viajesFind) {
+		} else if (viajes.length == 0) {
 			res.status(404).send({
-				message: 'Error en la consulta'
+				message: 'No hay viajes.'
 			});
 		} else {
 			res.status(200).send({
-				viajes: viajesFind,
-				message: "Se obtuvieron los viajes habiles"
+				viajes: viajes
 			});
 		}
 	});
-
-
-
-} //getViajes
+} //getviajes
 
 
 //FUNCIÓN PARA OBTENER TODOS LOS VIAJES PAGINADAS PARA EL ADMINISTRADOR
@@ -141,31 +134,31 @@ function crearViaje(req, res) {
 	//RECOGEMOS LOS PARAMETROS DE LA PETICIÓN
 	var params = req.body;
 	
-	console.log(params);
 
 	if (params.origen && params.destino) {
 		//ASIGNAMOS VALORES AL OBJETO
 		viaje.origen = params.origen;
 		viaje.destino = params.destino;
-		viaje.fechaSalida = params.fechaSalida;
+		viaje.horaSalida = params.horaSalida;
 		viaje.status = params.status;
-
+		viaje.choferId = req.user.sub;
 
 			viaje.save((err, viajeStored) => {
 				if (err) {
 					
 					res.status(500).send({
-						message: 'Error al guardar la noticia.'
+						message: 'Error al guardar el viaje.'
 					});
 				} else if (!viajeStored) {
 					
 					res.status(404).send({
-						message: 'No se ha registrado la noticia.'
+						message: 'No se ha registrado el viaje.'
 					});
 				} else {
 					
 					res.status(200).send({
-						viaje: viajeStored
+						viaje: viajeStored,
+						message: 'Se registro el viaje con exito.'
 					});
 				}
 			});
@@ -174,7 +167,48 @@ function crearViaje(req, res) {
 			message: 'Introduce todos los datos para el viaje.'
 		});
 	}
-} //crearNoticia
+} //crearViaje
+
+//FUNCIÓN PARA DAR DE ALTA NUEVOS VIAJES
+function crearDireccion(req, res) {
+	//HACEMOS UNA INSTANCIA DEL MODELO
+	var direccion = new Direccion();
+console.log('pont');
+	//RECOGEMOS LOS PARAMETROS DE LA PETICIÓN
+	var params = req.body;
+	
+
+	if (params.calle && params.numero) {
+		//ASIGNAMOS VALORES AL OBJETO
+		direccion.calle = params.calle;
+		direccion.numero = params.numero;
+		direccion.colonia = params.colonia;
+
+			direccion.save((err, direccionStored) => {
+				if (err) {
+					
+					res.status(500).send({
+						message: 'Error al guardar el viaje.'
+					});
+				} else if (!direccionStored) {
+					
+					res.status(404).send({
+						message: 'No se ha registrado el viaje.'
+					});
+				} else {
+					
+					res.status(200).send({
+						direccion: direccionStored,
+						message: 'Se registro la direccion con exito.'
+					});
+				}
+			});
+	} else {
+		res.status(200).send({
+			message: 'Introduce todos los datos para la direccion.'
+		});
+	}
+} //crearDireccion
 
 //FUNCIÓN PARA BORRAR VIAJES
 function deleteViaje(req, res) {
@@ -234,5 +268,6 @@ module.exports = {
 	getViajesUsers,
 	updateViaje,
 	deleteViaje,
-	crearViaje
+	crearViaje,
+	crearDireccion
 }
