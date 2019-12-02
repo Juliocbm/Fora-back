@@ -22,8 +22,8 @@ function pruebas(req, res) {
 //FUNCIÓN PARA OBTENER TODAS LAS VIAJES (PIENSO QUE AQUÍ SE DEBERÍA DE LIMITAR LA CANTIDAD DE VIAJES QUE SE MUESTREN)
 function getViajes(req, res) {
 	Viaje.find({}).populate({
-		path: 'origenId'
-	}).exec((err, viajes) => {
+		path: 'direccionO'
+	}).populate({path:'choferId'}).exec((err, viajes) => {
 		if (err) {
 			res.status(500).send({
 				message: 'Error en la petición.'
@@ -142,6 +142,7 @@ function crearViaje(req, res) {
 		viaje.horaSalida = params.horaSalida;
 		viaje.status = params.status;
 		viaje.choferId = req.user.sub;
+		viaje.direccionO = params.direccionO;
 
 			viaje.save((err, viajeStored) => {
 				if (err) {
@@ -158,7 +159,7 @@ function crearViaje(req, res) {
 					
 					res.status(200).send({
 						viaje: viajeStored,
-						message: 'Se registro el viaje con exito.'
+						message: 'exito al guardar viaje'
 					});
 				}
 			});
@@ -173,7 +174,6 @@ function crearViaje(req, res) {
 function crearDireccion(req, res) {
 	//HACEMOS UNA INSTANCIA DEL MODELO
 	var direccion = new Direccion();
-console.log('pont');
 	//RECOGEMOS LOS PARAMETROS DE LA PETICIÓN
 	var params = req.body;
 	
