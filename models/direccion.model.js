@@ -6,11 +6,7 @@ var Schema = mongoose.Schema;
 var DireccionSchema = Schema({
 	calle:String,
 	numero:Number,
-	colonia:String/* ,
-	referencia:String,
-	pais:String,
-	estado:String,
-	municipio:String */
+	colonia:String
 }); 
 
 module.exports = mongoose.model('Direccion',DireccionSchema);

@@ -135,14 +135,13 @@ function crearViaje(req, res) {
 	var params = req.body;
 	
 
-	if (params.origen && params.destino) {
+	if (params.direccionO && params.direccionD) {
 		//ASIGNAMOS VALORES AL OBJETO
-		viaje.origen = params.origen;
-		viaje.destino = params.destino;
 		viaje.horaSalida = params.horaSalida;
 		viaje.status = params.status;
 		viaje.choferId = req.user.sub;
 		viaje.direccionO = params.direccionO;
+		viaje.direccionD = params.direccionD;
 
 			viaje.save((err, viajeStored) => {
 				if (err) {
